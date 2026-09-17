@@ -1,6 +1,6 @@
 ---
 title: "Privacy Policy"
-date: 2026-09-16
+date: 2026-09-17
 draft: false
 ---
 
@@ -20,6 +20,7 @@ We collect information you voluntarily provide when you:
 
 - **Submit inquiries or consultation requests**: Name, email address, phone number, and details about your project or software idea
 - **Apply to become a tester**: Name, contact information, country and timezone, device information, optionally the email address tied to your Apple ID (for TestFlight), availability, and testing experience
+- **Sign in to the tester portal**: If you're in our tester pool, the email address you sign in with, which we use to send you a one-time sign-in link
 - **Join a paid test round**: When you accept an invitation to a paid round, your payment method and payment handle (for example a PayPal or Venmo account, or a cryptocurrency wallet address). We do not ask for payment details at signup
 - **Make payments**: Payment is processed securely through Stripe. We do not store credit card numbers or financial account information on our servers
 - **Communicate with us**: Any information you include in emails or other communications
@@ -30,16 +31,17 @@ When you visit our Site, we may automatically collect:
 
 - **Log Data**: IP address, browser type and version, operating system, referring URLs, pages viewed, time and date of visits, and time spent on pages
 - **Device Information**: Device type, screen resolution, and device identifiers
+- **Tester portal sign-in**: When you ask for a sign-in link, we use your IP address to limit repeated requests. We store it only in hashed (scrambled) form and delete it within a day
 - **Cookies and Similar Technologies**: See "Cookies and Tracking Technologies" section below
 
 ## Cookies and Tracking Technologies
 
 We use cookies and similar technologies to enhance your experience on our Site:
 
-- **Essential Cookies**: Required for the Site to function properly (e.g., remembering your theme preference)
+- **Essential Cookies**: Required for the Site to function properly (e.g., remembering your theme preference, or keeping you signed in to the tester portal)
 - **Analytics Cookies**: Help us understand how visitors interact with our Site to improve our services
 
-You can control cookies through your browser settings. Note that disabling certain cookies may affect Site functionality.
+The tester portal uses only its sign-in cookie, which expires after 30 days or when you sign out. You can control cookies through your browser settings. Note that disabling certain cookies may affect Site functionality.
 
 ## How We Use Your Information
 
@@ -65,6 +67,7 @@ We use third-party services to help operate our business:
 - **Stripe**: Payment processing ([Privacy Policy](https://stripe.com/privacy))
 - **Formspree**: Form submission handling ([Privacy Policy](https://formspree.io/legal/privacy-policy))
 - **Apple TestFlight**: If you're invited to test an iOS app, we share your Apple ID email with Apple so it can send the invitation ([Privacy Policy](https://www.apple.com/legal/privacy/))
+- **Cloudflare**: Security and delivery for our Site, email for our rinserepeatlabs.com addresses, and hosting for the tester portal. If you're in our tester pool, your name, email address, tester status and the test rounds you're invited to are stored with Cloudflare so you can sign in and see them ([Privacy Policy](https://www.cloudflare.com/privacypolicy/))
 - **GitHub Pages**: Website hosting ([Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement))
 
 ### Legal Requirements
@@ -84,7 +87,7 @@ We retain your personal information only as long as necessary to fulfill the pur
 - Statute of limitations for potential legal claims
 - Guidelines issued by relevant data protection authorities
 
-**Tester applications**: Applications are kept in our tester pool, on systems we operate ourselves. If you haven't been invited to a test round within 12 months of applying, we delete your application. You can ask us to remove you from the pool at any time. We keep payment records for paid test rounds as long as tax and accounting law requires.
+**Tester applications**: Applications are kept in our tester pool, on systems we operate ourselves. Once we add you to the pool, your name, email address, tester status and test-round invitations are also stored with Cloudflare for the tester portal, and removed from there as soon as you leave the pool. If you haven't been invited to a test round within 12 months of applying, we delete your application. You can ask us to remove you from the pool at any time. We keep payment records for paid test rounds as long as tax and accounting law requires.
 
 ## Data Security
 
