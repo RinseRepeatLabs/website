@@ -1,10 +1,10 @@
 ---
 title: "Privacy Policy"
-date: 2026-01-12
+date: 2026-09-16
 draft: false
 ---
 
-**Last Updated: January 2026**
+**Last Updated: September 2026**
 
 ## Introduction
 
@@ -19,7 +19,8 @@ Please read this policy carefully. By accessing or using our Site or services, y
 We collect information you voluntarily provide when you:
 
 - **Submit inquiries or consultation requests**: Name, email address, phone number, and details about your project or software idea
-- **Apply to become a tester**: Name, contact information, device information, availability, and testing experience
+- **Apply to become a tester**: Name, contact information, country and timezone, device information, optionally the email address tied to your Apple ID (for TestFlight), availability, and testing experience
+- **Join a paid test round**: When you accept an invitation to a paid round, your payment method and payment handle (for example a PayPal or Venmo account, or a cryptocurrency wallet address). We do not ask for payment details at signup
 - **Make payments**: Payment is processed securely through Stripe. We do not store credit card numbers or financial account information on our servers
 - **Communicate with us**: Any information you include in emails or other communications
 
@@ -63,6 +64,7 @@ We use third-party services to help operate our business:
 
 - **Stripe**: Payment processing ([Privacy Policy](https://stripe.com/privacy))
 - **Formspree**: Form submission handling ([Privacy Policy](https://formspree.io/legal/privacy-policy))
+- **Apple TestFlight**: If you're invited to test an iOS app, we share your Apple ID email with Apple so it can send the invitation ([Privacy Policy](https://www.apple.com/legal/privacy/))
 - **GitHub Pages**: Website hosting ([Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement))
 
 ### Legal Requirements
@@ -81,6 +83,8 @@ We retain your personal information only as long as necessary to fulfill the pur
 - Legal obligations requiring data retention
 - Statute of limitations for potential legal claims
 - Guidelines issued by relevant data protection authorities
+
+**Tester applications**: Applications are kept in our tester pool, on systems we operate ourselves. If you haven't been invited to a test round within 12 months of applying, we delete your application. You can ask us to remove you from the pool at any time. We keep payment records for paid test rounds as long as tax and accounting law requires.
 
 ## Data Security
 

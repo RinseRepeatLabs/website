@@ -54,8 +54,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                   </svg>
                   <div>
-                    <span class="font-medium text-slate-900 dark:text-white">Earn Money</span>
-                    <p class="text-sm text-slate-600 dark:text-slate-400">Get paid to test apps before they launch</p>
+                    <span class="font-medium text-slate-900 dark:text-white">Paid Test Rounds</span>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">Get paid for test rounds you're invited to</p>
                   </div>
                 </li>
                 <li class="flex items-start">
@@ -104,15 +104,15 @@
                 <div class="flex items-start">
                   <div class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-500 font-bold text-sm mr-3 flex-shrink-0">1</div>
                   <div>
-                    <span class="font-medium text-slate-900 dark:text-white">Submit Your Profile</span>
-                    <p class="text-sm text-slate-600 dark:text-slate-400">Fill out the form with your details and devices</p>
+                    <span class="font-medium text-slate-900 dark:text-white">Join the Tester Pool</span>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">Tell us about yourself and your devices</p>
                   </div>
                 </div>
                 <div class="flex items-start">
                   <div class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-500 font-bold text-sm mr-3 flex-shrink-0">2</div>
                   <div>
                     <span class="font-medium text-slate-900 dark:text-white">Get Matched</span>
-                    <p class="text-sm text-slate-600 dark:text-slate-400">We'll match you with relevant testing opportunities</p>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">When a project fits your devices, we'll reach out with an invitation. This can take a while, depending on what we're building</p>
                   </div>
                 </div>
                 <div class="flex items-start">
@@ -126,7 +126,7 @@
                   <div class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-500 font-bold text-sm mr-3 flex-shrink-0">4</div>
                   <div>
                     <span class="font-medium text-slate-900 dark:text-white">Get Paid</span>
-                    <p class="text-sm text-slate-600 dark:text-slate-400">Submit your feedback and receive payment</p>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">Complete a test round and get paid. We'll ask for payment details when you join your first round</p>
                   </div>
                 </div>
               </div>
@@ -345,6 +345,11 @@
                       <input type="text" id="os_version" name="os_version" class="input-field" placeholder="e.g., iOS 17.2, Android 14">
                     </div>
                     <div>
+                      <label for="apple_id_email" class="label">Apple ID Email for TestFlight (Optional)</label>
+                      <input type="email" id="apple_id_email" name="apple_id_email" class="input-field" placeholder="you@icloud.com">
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">iPhone or iPad testers only. TestFlight invitations go to the email tied to your Apple ID, which may differ from your contact email.</p>
+                    </div>
+                    <div>
                       <label for="additional_devices" class="label">Additional Devices Available (Optional)</label>
                       <textarea id="additional_devices" name="additional_devices" rows="2" class="input-field" placeholder="List any other devices you have available for testing"></textarea>
                     </div>
@@ -505,7 +510,7 @@
                       Back
                     </button>
                     <button type="button" onclick="nextStep()" class="btn btn-primary">
-                      Next: Payment & Submit
+                      Next: Submit
                       <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                       </svg>
@@ -513,40 +518,9 @@
                   </div>
                 </div>
 
-                <!-- Step 5: Payment & Submit -->
+                <!-- Step 5: Submit -->
                 <div data-step="5" class="form-step hidden">
-                  <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4 pb-2 border-b border-slate-200 dark:border-slate-700">Payment Preferences</h3>
-                  <div class="space-y-4">
-                    <div>
-                      <label for="payment_method" class="label">Preferred Payment Method <span class="text-red-500">*</span></label>
-                      <select id="payment_method" name="payment_method" required class="input-field">
-                        <option value="">Select payment method</option>
-                        <option value="PayPal">PayPal</option>
-                        <option value="Venmo">Venmo</option>
-                        <option value="Crypto">Cryptocurrency</option>
-                      </select>
-                    </div>
-                    <div id="crypto_type_wrapper" class="hidden">
-                      <label for="crypto_type" class="label">Cryptocurrency <span class="text-red-500">*</span></label>
-                      <select id="crypto_type" name="crypto_type" class="input-field">
-                        <option value="">Select cryptocurrency</option>
-                        <option value="Bitcoin">Bitcoin (BTC)</option>
-                        <option value="Ethereum">Ethereum (ETH)</option>
-                        <option value="USDC">USD Coin (USDC)</option>
-                        <option value="Dogecoin">Dogecoin (DOGE)</option>
-                        <option value="XRP">Ripple (XRP)</option>
-                        <option value="Stellar">Stellar (XLM)</option>
-                        <option value="Dash">Dash (DASH)</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label for="payment_handle" id="payment_handle_label" class="label">Payment Email/Handle <span class="text-red-500">*</span></label>
-                      <input type="text" id="payment_handle" name="payment_handle" required class="input-field" placeholder="Email or username">
-                    </div>
-                  </div>
-
-                  <!-- Additional Information (part of Step 5) -->
-                  <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4 pb-2 border-b border-slate-200 dark:border-slate-700 mt-8">Additional Information</h3>
+                  <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4 pb-2 border-b border-slate-200 dark:border-slate-700">Additional Information</h3>
                   <div class="space-y-4">
                     <!-- How Did You Hear -->
                     <div>
@@ -595,7 +569,7 @@
                   </div>
 
                   <p class="text-sm text-slate-500 dark:text-slate-400 text-center mt-4">
-                    By submitting, you agree to our privacy policy. Your information is secure and will never be shared.
+                    By submitting, you agree to our <a href="/privacy/" class="underline hover:text-primary-500">privacy policy</a>. We use your details only to run our tester program and never sell them. If you're invited to an iOS test, your Apple ID email is shared with Apple to send the TestFlight invitation.
                   </p>
                 </div>
               </form>
@@ -736,26 +710,6 @@
                   }
                 }
 
-                // Payment method change handler
-                document.getElementById('payment_method').addEventListener('change', function() {
-                  const cryptoWrapper = document.getElementById('crypto_type_wrapper');
-                  const cryptoSelect = document.getElementById('crypto_type');
-                  const paymentLabel = document.getElementById('payment_handle_label');
-                  const paymentInput = document.getElementById('payment_handle');
-
-                  if (this.value === 'Crypto') {
-                    cryptoWrapper.classList.remove('hidden');
-                    cryptoSelect.setAttribute('required', 'required');
-                    paymentLabel.innerHTML = 'Wallet Address <span class="text-red-500">*</span>';
-                    paymentInput.placeholder = 'Your wallet address';
-                  } else {
-                    cryptoWrapper.classList.add('hidden');
-                    cryptoSelect.removeAttribute('required');
-                    cryptoSelect.value = '';
-                    paymentLabel.innerHTML = 'Payment Email/Handle <span class="text-red-500">*</span>';
-                    paymentInput.placeholder = 'Email or username';
-                  }
-                });
 
                 // Initialize
                 document.addEventListener('DOMContentLoaded', function() {
