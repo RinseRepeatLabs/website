@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="FIG. 1 — rPocketBase as an exploded view: seven layers from SQLite up to the admin UI, each opening as you scroll, with the real numbers behind them.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="rPocketBase FIG. 1">
+<meta property="og:description" content="FIG. 1 — rPocketBase as an exploded view: seven layers from SQLite up to the admin UI, each opening as you scroll, with the real numbers behind them.">
+<meta property="og:url" content="https://rinserepeatlabs.com/rpocketbase/fig1/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230e1218'/%3E%3Ctext x='16' y='21' text-anchor='middle' font-family='Cascadia Code,SF Mono,JetBrains Mono,ui-monospace,monospace' font-weight='700' font-size='15' letter-spacing='-0.6' fill='%23d4894c'%3ErPB%3C/text%3E%3C/svg%3E">
+<title>rPocketBase FIG. 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Noto+Sans+Mono:wght@400;600;700&display=swap">
+<style>
+  /* One deliberate look: the navy blueprint of the FIG. 1 shirt. Single theme, painted explicitly. */
+  :root {
+    --ground: #1c2a44;
+    --ground-deep: #16223a;
+    --ink: #efe6d2;
+    --ink-soft: #c4bcab;
+    --ink-faint: #8f95a0;
+    --rule: #33466a;
+    --copper: #d4894c;
+    --copper-soft: #e8a36a;
+    --mono: "Noto Sans Mono", "Cascadia Code", ui-monospace, SFMono-Regular, Menlo, monospace;
+    --serif: "Newsreader", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+    color-scheme: dark;
+  }
+  html { background: var(--ground); }
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.6;
+    padding-inline: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--copper-soft); }
+  a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--copper); outline-offset: 3px; border-radius: 2px; }
+
+  .sheet { max-width: 1180px; margin-inline: auto; padding-block: 40px 24px; }
+
+  header.title {
+    display: grid; gap: 6px;
+    padding-block: 8px 28px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-faint); }
+  h1 { font-family: var(--mono); font-weight: 700; font-size: clamp(44px, 8vw, 76px); letter-spacing: .06em; line-height: 1; margin: 6px 0 0; text-wrap: balance; }
+  .subtitle { font-family: var(--mono); font-size: 15px; letter-spacing: .14em; color: var(--ink-soft); margin: 0; }
+  .intro { max-width: 60ch; font-size: 21px; line-height: 1.5; color: var(--ink); margin: 18px 0 0; }
+  .intro em { color: var(--copper-soft); font-style: italic; }
+
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; align-items: start; }
+
+  .figure {
+    position: sticky; top: env(safe-area-inset-top, 0px);
+    height: 100vh; max-height: 900px;
+    display: grid; grid-template-rows: 1fr auto; align-items: center;
+    padding-block: 24px;
+  }
+  .figure svg { width: 100%; height: 100%; max-height: 760px; overflow: visible; }
+  .figure .caption { font-family: var(--mono); font-size: 11px; letter-spacing: .3em; color: var(--ink-faint); text-align: center; padding-top: 8px; }
+
+  /* diagram */
+  /* Every value below is driven per frame from scroll position, so no CSS transitions. */
+  .slab { opacity: var(--op, 1); }
+  .slab polygon { fill: var(--ground); stroke: var(--sc, var(--ink)); stroke-width: var(--sw, 1.8); stroke-linejoin: round; }
+  .slab .hatch { stroke: var(--ink); stroke-width: .7; opacity: .5; }
+  .slab .glyph { font-family: var(--mono); font-weight: 700; fill: var(--copper); }
+  .slab .leader { stroke: var(--sc, var(--ink)); stroke-width: 1.1; }
+  .slab .num { font-family: var(--mono); font-weight: 700; font-size: 15px; fill: var(--copper); }
+  .slab .name { font-family: var(--mono); font-size: 13.5px; fill: var(--sc, var(--ink)); }
+  .slab .hit { fill: transparent; cursor: pointer; }
+  .axis { stroke: var(--ink); stroke-width: 1; stroke-dasharray: 4 4; opacity: var(--ax, .45); }
+  .bracket path { fill: none; stroke: var(--copper); stroke-width: 1.8; }
+  .bracket text { font-family: var(--mono); font-weight: 700; font-size: 12px; letter-spacing: .24em; fill: var(--copper); }
+  .bracket { opacity: var(--bop, .55); }
+
+  /* specification */
+  .spec { display: grid; gap: 0; }
+  .part {
+    min-height: 78vh;
+    padding-block: 64px;
+    border-bottom: 1px solid var(--rule);
+    display: grid; align-content: center; gap: 18px;
+  }
+  .part:last-child { border-bottom: 0; }
+  .part-head { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+  .ref { font-family: var(--mono); font-weight: 700; font-size: 44px; line-height: 1; color: var(--copper); font-variant-numeric: tabular-nums; }
+  .part h2 { font-family: var(--mono); font-weight: 600; font-size: 17px; letter-spacing: .2em; text-transform: uppercase; margin: 0; text-wrap: balance; }
+  .para { font-family: var(--mono); font-size: 12px; color: var(--ink-faint); letter-spacing: .08em; margin-left: auto; }
+  .lede { font-size: 27px; line-height: 1.3; font-style: italic; margin: 0; max-width: 30ch; text-wrap: balance; }
+  .part p.body { margin: 0; max-width: 60ch; color: var(--ink-soft); }
+  .part p.body code, .facts code { font-family: var(--mono); font-size: .82em; color: var(--ink); background: var(--ground-deep); padding: 1px 5px; border-radius: 3px; }
+  pre.line {
+    margin: 0; font-family: var(--mono); font-size: 13.5px; line-height: 1.5;
+    color: var(--ink); background: var(--ground-deep);
+    border: 1px solid var(--rule); border-left: 3px solid var(--copper);
+    padding: 12px 14px; overflow-x: auto; max-width: 100%;
+  }
+  pre.line .k { color: var(--copper-soft); }
+  dl.facts { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 8px 20px; margin: 4px 0 0; font-size: 15px; }
+  dl.facts dt { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-faint); padding-top: 4px; }
+  dl.facts dd { margin: 0; color: var(--ink); }
+
+  .types { overflow-x: auto; max-width: 100%; margin-top: 4px; }
+  table.types-tbl { border-collapse: collapse; font-size: 14px; min-width: 460px; }
+  table.types-tbl th { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-faint); font-weight: 400; text-align: left; padding: 0 18px 8px 0; border-bottom: 1px solid var(--rule); }
+  table.types-tbl td { padding: 7px 18px 7px 0; border-bottom: 1px solid var(--rule); vertical-align: top; color: var(--ink-soft); }
+  table.types-tbl tr:last-child td { border-bottom: 0; }
+  table.types-tbl td.t { font-family: var(--mono); font-size: 13px; color: var(--copper-soft); white-space: nowrap; }
+  table.types-tbl td.s { font-family: var(--mono); font-size: 12px; color: var(--ink-faint); white-space: nowrap; }
+
+  .sub { display: grid; gap: 14px; margin-top: 10px; padding-top: 22px; border-top: 1px solid var(--rule); }
+  .sub h3 { display: flex; align-items: baseline; gap: 12px; font-family: var(--mono); font-weight: 600; font-size: 15px; letter-spacing: .18em; text-transform: uppercase; margin: 0; }
+  .sub-ref { font-family: var(--mono); font-weight: 700; font-size: 26px; letter-spacing: 0; color: var(--copper); text-transform: none; }
+
+  footer { border-top: 1px solid var(--rule); margin-top: 8px; padding-block: 22px 8px; display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; font-family: var(--mono); font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-faint); }
+
+  @media (max-width: 900px) {
+    body { font-size: 17px; }
+    .layout { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    .figure {
+      height: 42vh; max-height: 380px; z-index: 2;
+      background: var(--ground);
+      border-bottom: 1px solid var(--rule);
+      padding-block: 8px;
+      margin-inline: -16px; padding-inline: 16px;
+    }
+    .figure .caption { display: none; }
+    .part { min-height: 0; padding-block: 44px; }
+    .lede { font-size: 23px; }
+    .ref { font-size: 36px; }
+    .para { margin-left: 0; width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+</style>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { color-scheme: dark; }
+  body { margin: 0; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+  <header class="title">
+    <span class="eyebrow">Rinse Repeat Labs · Specification</span>
+    <h1>FIG. 1</h1>
+    <p class="subtitle">rPocketBase · exploded view</p>
+    <p class="intro">Seven layers, one Rust binary. The drawing starts assembled; scroll and it comes apart one layer at a time, in the order a request travels: <em>from the admin screen at the top down to the database file at the bottom.</em></p>
+  </header>
+
+  <div class="layout">
+    <div class="figure" aria-hidden="false">
+      <svg id="fig" viewBox="0 0 640 640" role="img" aria-labelledby="figTitle">
+        <title id="figTitle">Isometric exploded view of rPocketBase's seven layers, with the layer you are reading lifted open</title>
+      </svg>
+      <div class="caption">SHEET 1 OF 1</div>
+    </div>
+
+    <main class="spec">
+      <section class="part" id="p22" data-layer="6">
+        <div class="part-head"><span class="ref">22</span><h2>Admin UI</h2><span class="para">[0022]</span></div>
+        <p class="lede">The dashboard ships inside the binary.</p>
+        <p class="body">The admin app is plain HTML, CSS and JavaScript, baked in at compile time with <code>include_str!</code>. <code>rpocketbase serve</code> needs no frontend build and no second server. The script files are joined in a fixed order into one scope, without a bundler.</p>
+        <dl class="facts">
+          <dt>Path</dt><dd><code>/_/</code>, with <code>/admin</code> as an alias</dd>
+          <dt>Built</dt><dd>Embedded at compile time, served from memory</dd>
+          <dt>Scripts</dt><dd><code>script-src 'self'</code> with no inline script</dd>
+          <dt>Covers</dt><dd>Collections, rules, API keys, backups, system health, and the API docs at <code>/_/#/docs</code></dd>
+        </dl>
+      </section>
+
+      <section class="part" id="p20" data-layer="5">
+        <div class="part-head"><span class="ref">20</span><h2>Realtime (SSE)</h2><span class="para">[0020]</span></div>
+        <p class="lede">One long-lived request, fanned out in process.</p>
+        <p class="body">A client opens a single request to the realtime endpoint and keeps it open. The first message gives it a <code>clientId</code>, and record changes stream in after that. The hub that fans events out lives inside the process. That keeps it simple and fast, and it also makes rPocketBase a single instance, not a cluster.</p>
+        <pre class="line"><span class="k">GET</span> /api/realtime
+event: PB_CONNECT
+data: {"clientId": "…"}</pre>
+        <dl class="facts">
+          <dt>Keep-alive</dt><dd>Every 15 seconds</dd>
+          <dt>Auth</dt><dd>Browsers' <code>EventSource</code> can't set headers, so it sends <code>?token=</code></dd>
+          <dt>API keys</dt><dd>A key's collection allowlist applies to events too</dd>
+          <dt>Scale</dt><dd>One instance: the hub and the rate limits live in memory</dd>
+        </dl>
+      </section>
+
+      <section class="part" id="p18" data-layer="4">
+        <div class="part-head"><span class="ref">18</span><h2>REST API</h2><span class="para">[0018]</span></div>
+        <p class="lede">PocketBase-shaped, on purpose.</p>
+        <p class="body">Every collection's records live at one predictable address. Filtering, sorting and paging are query parameters, written in the same expression language as the rules below. Files are served with short-lived tickets, so a session token never ends up in a URL.</p>
+        <pre class="line"><span class="k">GET</span> /api/collections/tasks/records?filter=(status='open')&amp;sort=-created</pre>
+        <dl class="facts">
+          <dt>Records</dt><dd><code>/api/collections/{name}/records</code></dd>
+          <dt>One record</dt><dd><code>…/records/{id}</code>. There is no <code>/record/</code>.</dd>
+          <dt>Files</dt><dd><code>/api/files/{collection}/{id}/{file}</code></dd>
+          <dt>Tickets</dt><dd><code>rpbf_&lt;expiry&gt;_&lt;hmac-sha256&gt;</code></dd>
+          <dt>Caching</dt><dd>API responses are never cached</dd>
+          <dt>Health</dt><dd><code>/api/health</code> reports liveness and version only</dd>
+        </dl>
+      </section>
+
+      <section class="part" id="p16" data-layer="3">
+        <div class="part-head"><span class="ref">16</span><h2>Auth</h2><span class="para">[0016]</span></div>
+        <p class="lede">Slow to guess, fast to check.</p>
+        <p class="body">Passwords are hashed with Argon2id. A login for an email that doesn't exist still runs a full Argon2 check against a dummy hash, so the response time doesn't reveal which accounts exist. Sessions are signed tokens with hard limits, and machine keys never get superuser powers.</p>
+        <pre class="line">$argon2id$v=19$<span class="k">m=19456,t=2,p=1</span>$…</pre>
+        <dl class="facts">
+          <dt>Hash</dt><dd>Argon2id, 19 MiB of memory, 2 passes, 1 lane</dd>
+          <dt>Sessions</dt><dd>HS256 JWT, valid 24 hours; renewable for up to 7 days from sign-in</dd>
+          <dt>Limits</dt><dd>20 failed logins per 15 min per email, 40 per IP, then HTTP 429</dd>
+          <dt>API keys</dt><dd><code>rpbk_…</code>, never superusers: the collection allowlist is checked first, then the normal rules</dd>
+          <dt>Compare</dt><dd>Constant-time for keys and token digests</dd>
+          <dt>First run</dt><dd>The installer locks after the first superuser is created</dd>
+        </dl>
+      </section>
+
+      <section class="part" id="p14" data-layer="2">
+        <div class="part-head"><span class="ref">14</span><h2>Rules engine</h2><span class="para">[0014]</span></div>
+        <p class="lede">Every rule becomes SQL, or nothing.</p>
+        <p class="body">Each collection has list, view, create, update and delete rules, written in a PocketBase-compatible expression language. List rules compile to parameterized SQL. If a rule can't be compiled, the query becomes <code>WHERE 1 = 0</code>: you get an empty list, never an unfiltered one.</p>
+        <pre class="line"><span class="k">listRule</span>  owner = @request.auth.id &amp;&amp; status != "archived"</pre>
+        <dl class="facts">
+          <dt>Null rule</dt><dd>Superusers only</dd>
+          <dt>Empty rule</dt><dd>Public</dd>
+          <dt>Operators</dt><dd><code>= != &gt; &gt;= &lt; &lt;= ~ !~</code>, plus <code>?</code> any-of forms</dd>
+          <dt>Context</dt><dd><code>@request.auth.*</code> <code>@request.body.*</code> <code>@now</code> …</dd>
+          <dt>Modifiers</dt><dd><code>:isset</code> <code>:changed</code> <code>:length</code> <code>:lower</code></dd>
+          <dt>Guardrail</dt><dd>Client filters can't reference <code>@collection</code>, <code>password</code> or <code>tokenKey</code></dd>
+        </dl>
+      </section>
+
+      <section class="part" id="p12" data-layer="1">
+        <div class="part-head"><span class="ref">12</span><h2>Schema</h2><span class="para">[0012]</span></div>
+        <p class="lede">Collections are tables. Fields are columns. Views are queries.</p>
+        <p class="body">A collection is the unit of schema. Creating one creates a SQLite table below; each field adds a column. A collection can also carry behavior packs, such as append-only, soft delete and TTL expiry. The whole schema travels as JSON, and an import is checked in full before anything is written, so a bad entry late in the file can't leave half a schema behind.</p>
+        <dl class="facts">
+          <dt>Kinds</dt><dd>Base collections, auth collections, and views</dd>
+          <dt>Portable</dt><dd>Export and import the schema as JSON</dd>
+          <dt>Behaviors</dt><dd>Append-only, soft delete, TTL expiry</dd>
+        </dl>
+
+        <div class="sub">
+          <h3><span class="sub-ref">12a</span>Fields</h3>
+          <p class="body">A field's type decides its storage type in SQLite, what is checked on write, and what comes back on read. There are fourteen.</p>
+        <div class="types">
+          <table class="types-tbl">
+            <thead><tr><th>Type</th><th>Stored as</th><th>What it adds</th></tr></thead>
+            <tbody>
+            <tr><td class="t">text</td><td class="s">TEXT</td><td>Minimum and maximum length, a regular-expression pattern, and an optional autogenerated pattern</td></tr>
+            <tr><td class="t">number</td><td class="s">REAL</td><td>Minimum and maximum value</td></tr>
+            <tr><td class="t">bool</td><td class="s">INTEGER</td><td>Stored as 0 or 1</td></tr>
+            <tr><td class="t">email</td><td class="s">TEXT</td><td>Format checked on write</td></tr>
+            <tr><td class="t">url</td><td class="s">TEXT</td><td>Format checked on write</td></tr>
+            <tr><td class="t">date</td><td class="s">TEXT</td><td>ISO-8601 text, comparable with <code>@now</code> and the date macros</td></tr>
+            <tr><td class="t">json</td><td class="s">TEXT</td><td>Any JSON value, kept as written</td></tr>
+            <tr><td class="t">file</td><td class="s">TEXT</td><td>Filenames in <code>pb_data/storage</code>, served through <code>/api/files</code></td></tr>
+            <tr><td class="t">password</td><td class="s">TEXT</td><td>Argon2id hash. Never returned, and never usable in a client filter</td></tr>
+            <tr><td class="t">autodate</td><td class="s">TEXT</td><td>Timestamp written on create, on update, or both</td></tr>
+            <tr><td class="t">select</td><td class="s">TEXT</td><td>A fixed list of values. <code>maxSelect &gt; 1</code> makes it multi-select</td></tr>
+            <tr><td class="t">relation</td><td class="s">TEXT</td><td>Record ids in another collection; <code>maxSelect</code> allows several</td></tr>
+            <tr><td class="t">editor</td><td class="s">TEXT</td><td>Rich text, stored as HTML</td></tr>
+            <tr><td class="t">secret</td><td class="s">TEXT</td><td>An AES-256-GCM envelope; sealed, see 12b. Never returned as plain text</td></tr>
+            </tbody>
+          </table>
+        </div>
+          <dl class="facts">
+            <dt>Every field</dt><dd><code>required</code>, <code>hidden</code>, <code>presentable</code>, <code>system</code>, <code>primaryKey</code></dd>
+            <dt>Per type</dt><dd><code>min</code> / <code>max</code>, <code>pattern</code>, <code>maxSelect</code>, <code>collectionId</code>, <code>onCreate</code> / <code>onUpdate</code>, <code>secretMode</code></dd>
+          </dl>
+        </div>
+
+        <div class="sub">
+          <h3><span class="sub-ref">12b</span>Secret fields</h3>
+          <p class="body">One of the fourteen types is sealed. What lands in SQLite is an AES-256-GCM envelope, not plain text. It unlocks with the server key or with a passphrase (stretched with Argon2id), and only through an explicit reveal request, which can be audited.</p>
+          <pre class="line"><span class="k">POST</span> /api/collections/{name}/records/{id}/reveal</pre>
+          <dl class="facts">
+            <dt>Cipher</dt><dd>AES-256-GCM</dd>
+            <dt>Keys</dt><dd>The server key (<code>.vault_key</code>) or a passphrase stretched with Argon2id</dd>
+            <dt>Reveal</dt><dd>A dedicated endpoint, with configurable audit destinations</dd>
+            <dt>Caution</dt><dd>Backups include <code>.vault_key</code></dd>
+          </dl>
+        </div>
+
+        <div class="sub">
+          <h3><span class="sub-ref">12c</span>Views</h3>
+          <p class="body">A view is a collection with a query instead of columns. Before it is created, the query has to prove it only reads: write keywords are rejected, and a column policy blocks <code>password</code> and <code>tokenKey</code> from being selected out under another name. The fields are then read back from the database rather than declared, so the view's shape always matches what the query actually returns.</p>
+          <pre class="line"><span class="k">viewQuery</span>  SELECT id, owner, COUNT(*) AS runs FROM jobs GROUP BY owner</pre>
+          <dl class="facts">
+            <dt>Runs where</dt><dd>It becomes a real SQLite view, so the query runs in layer 10 on every read</dd>
+            <dt>Columns</dt><dd>Read back from the database, not declared by hand</dd>
+            <dt>Rules</dt><dd><code>listRule</code> and <code>viewRule</code> apply as they do anywhere else</dd>
+            <dt>Writes</dt><dd>Refused: "View collections are read-only."</dd>
+            <dt>Admin</dt><dd>The view builder previews columns and sample rows before you save</dd>
+          </dl>
+        </div>
+      </section>
+
+      <section class="part" id="p10" data-layer="0">
+        <div class="part-head"><span class="ref">10</span><h2>SQLite</h2><span class="para">[0010]</span></div>
+        <p class="lede">One file, written ahead.</p>
+        <p class="body">Data lives in an embedded SQLite database in <code>pb_data</code>, opened in write-ahead-log (WAL) mode so reads don't wait on writes. Views are real SQLite views, checked to be read-only before they're created. Uploaded files sit next to the database in <code>pb_data/storage</code>.</p>
+        <dl class="facts">
+          <dt>Journal</dt><dd>WAL</dd>
+          <dt>Integrity</dt><dd>Foreign keys on; 5,000 ms busy timeout</dd>
+          <dt>Views</dt><dd>Read-only <code>viewQuery</code>, with columns read back from the database</dd>
+          <dt>Expiry</dt><dd>Collection-level TTL, plus a sweep an admin can run</dd>
+          <dt>Backups</dt><dd>A zip of the database, WAL, file storage and secrets. Treat it as secret.</dd>
+        </dl>
+      </section>
+
+      <section class="part" id="p100" data-layer="all">
+        <div class="part-head"><span class="ref">100</span><h2>One binary</h2><span class="para">[0100]</span></div>
+        <p class="lede">Everything above is one process.</p>
+        <p class="body"><code>rpocketbase serve</code> starts all seven layers from a single Rust binary: no Node, no separate frontend, no external database. If you want TLS, put Caddy in front of it. Caddy is the one piece that runs outside the binary.</p>
+        <pre class="line"><span class="k">$</span> rpocketbase serve
+rPocketBase listening on 127.0.0.1:8090</pre>
+        <dl class="facts">
+          <dt>Language</dt><dd>Rust</dd>
+          <dt>Default</dt><dd><code>127.0.0.1:8090</code>, data in <code>pb_data/</code></dd>
+          <dt>TLS</dt><dd>Optional Caddy in front, outside the binary</dd>
+          <dt>License</dt><dd>MIT. A clean-room project, independent of PocketBase.</dd>
+        </dl>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <span>Sheet 1 of 1</span>
+    <span>rPocketBase 0.2.0-beta.13</span>
+    <span><a href="/portfolio/rpocketbase/">rPocketBase</a> · a <a href="https://rinserepeatlabs.com">Rinse Repeat Labs</a> project</span>
+  </footer>
+</div>
+
+<script>
+(() => {
+  const NS = "http://www.w3.org/2000/svg";
+  const svg = document.getElementById("fig");
+  const C30 = Math.cos(Math.PI / 6);
+  const W = 150, T = 20, GAP = 24, OPEN = 70, CX = 230, BASE = 408, LX = 470;
+  const P = (x, y, z) => [CX + (x - y) * C30, BASE + (x + y) * 0.5 - z];
+  const pts = a => a.map(p => p.map(v => v.toFixed(1)).join(",")).join(" ");
+  const el = (tag, attrs, parent) => {
+    const n = document.createElementNS(NS, tag);
+    for (const k in attrs) n.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(n);
+    return n;
+  };
+  const LAYERS = [
+    { n: 10, name: "SQLite", glyph: "WAL", id: "p10" },
+    { n: 12, name: "Schema", glyph: "SCHEMA", id: "p12" },
+    { n: 14, name: "Rules engine", glyph: "1 = 0", id: "p14" },
+    { n: 16, name: "Auth", glyph: "argon2id", id: "p16" },
+    { n: 18, name: "REST API", glyph: "/api", id: "p18" },
+    { n: 20, name: "Realtime (SSE)", glyph: "SSE", id: "p20" },
+    { n: 22, name: "Admin UI", glyph: "rPB", id: "p22" },
+  ];
+
+  // dashed axes behind the stack
+  const axes = el("g", {}, svg);
+  const axisLines = [[0, 0], [W, W], [0, W]].map(() => el("line", { class: "axis" }, axes));
+
+  const bracket = el("g", { class: "bracket" }, svg);
+  const bPath = el("path", {}, bracket);
+  const bText = el("text", { "text-anchor": "middle" }, bracket);
+  bText.textContent = "100 · ONE BINARY";
+
+  const slabs = LAYERS.map((L, i) => {
+    const g = el("g", { class: "slab", "data-i": i }, svg);
+    const left = [P(0, W, T), P(W, W, T), P(W, W, 0), P(0, W, 0)];
+    const right = [P(W, 0, T), P(W, W, T), P(W, W, 0), P(W, 0, 0)];
+    const top = [P(0, 0, T), P(W, 0, T), P(W, W, T), P(0, W, T)];
+    el("polygon", { points: pts(left) }, g);
+    el("polygon", { points: pts(right) }, g);
+    for (let j = 1; j < 8; j++) {
+      const a = P(W, (j * W) / 8, T), b = P(W, (j * W) / 8, 0);
+      el("line", { class: "hatch", x1: a[0], y1: a[1], x2: b[0], y2: b[1] }, g);
+    }
+    el("polygon", { points: pts(top) }, g);
+    const [ox, oy] = P(W / 2, W / 2, T);
+    const gl = el("g", { transform: `matrix(${C30.toFixed(4)},0.5,${(-C30).toFixed(4)},0.5,${ox.toFixed(1)},${oy.toFixed(1)})` }, g);
+    const size = L.glyph.length > 5 ? 20 : L.glyph === "rPB" ? 40 : 30;
+    const gt = el("text", { class: "glyph", "text-anchor": "middle", y: size * 0.35, "font-size": size }, gl);
+    gt.textContent = L.glyph;
+    const [lx0, ly0] = P(W, 0, T / 2);
+    el("line", { class: "leader", x1: lx0 + 4, y1: ly0, x2: LX - 8, y2: ly0 }, g);
+    const num = el("text", { class: "num", x: LX, y: ly0 + 5 }, g); num.textContent = L.n;
+    const nm = el("text", { class: "name", x: LX + 28, y: ly0 + 5 }, g); nm.textContent = L.name;
+    const hit = el("rect", { class: "hit", x: LX - 6, y: ly0 - 14, width: 170, height: 26 }, g);
+    hit.addEventListener("click", () => document.getElementById(L.id).scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center" }));
+    return g;
+  });
+
+  const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const INK = [0xef, 0xe6, 0xd2], HL = [0xe8, 0xa3, 0x6a];
+  const mix = t => `rgb(${INK.map((c, i) => Math.round(lerp(c, HL[i], t))).join(",")})`;
+
+  // The whole drawing is a function of one number: how far the reader has scrolled.
+  //   explode  0 = stack closed (at the top of the page), 1 = layers apart
+  //   focus    which layer is open, as a fraction, so it slides between layers
+  //   assembly 0 → 1 while the last section brings every layer back up lit
+  function render(explode, focus, assembly, gate) {
+    const zs = slabs.map((_, j) => j * (T + GAP * explode) + OPEN * explode * (1 - assembly) * clamp(j - focus, 0, 1));
+    slabs.forEach((g, j) => {
+      const lit = clamp(1 - Math.abs(j - focus), 0, 1) * explode * (1 - assembly) * gate[j];
+      g.style.transform = `translateY(${(-zs[j]).toFixed(2)}px)`;
+      g.style.setProperty("--op", Math.max(lit, assembly, 1 - explode, 0.28).toFixed(3));
+      g.style.setProperty("--sc", mix(lit));
+      g.style.setProperty("--sw", (1.8 + 0.5 * lit).toFixed(2));
+    });
+    const topZ = zs[zs.length - 1] + T;
+    const yTop = P(0, 0, topZ)[1], yBot = P(W, W, 0)[1], bx = 34;
+    bPath.setAttribute("d", `M${bx + 12} ${yTop.toFixed(1)} H${bx} V${yBot.toFixed(1)} H${bx + 12}`);
+    bText.setAttribute("transform", `translate(${bx - 10} ${((yTop + yBot) / 2).toFixed(1)}) rotate(-90)`);
+    bracket.style.setProperty("--bop", (0.4 + 0.6 * assembly).toFixed(3));
+    [[0, 0], [W, W], [0, W]].forEach(([x, y], k) => {
+      const a = P(x, y, T), b = P(x, y, topZ - T);
+      axisLines[k].setAttribute("x1", a[0].toFixed(1)); axisLines[k].setAttribute("y1", a[1].toFixed(1));
+      axisLines[k].setAttribute("x2", b[0].toFixed(1)); axisLines[k].setAttribute("y2", b[1].toFixed(1));
+      axisLines[k].style.setProperty("--ax", (0.45 * explode).toFixed(3));
+    });
+  }
+
+  const parts = [...document.querySelectorAll(".part")];
+  const figure = document.querySelector(".figure");
+  const narrow = matchMedia("(max-width: 900px)");
+  const L = slabs.length;
+
+  // The line each numeral is measured against: mid-column on a wide screen,
+  // just below the pinned drawing on a phone.
+  const triggerLine = () => narrow.matches
+    ? figure.getBoundingClientRect().bottom + 56
+    : innerHeight * 0.42;
+
+  const smooth = t => t * t * (3 - 2 * t);
+
+  function update() {
+    const line = triggerLine();
+    const rects = parts.map(p => p.getBoundingClientRect());
+    const heads = parts.map(p => p.querySelector(".part-head").getBoundingClientRect().top);
+    const n = heads.length;
+    let s;
+    if (heads[0] > line) {
+      s = -clamp((heads[0] - line) / (innerHeight * 0.45), 0, 1);   // -1 … 0 before the first part
+    } else {
+      let i = 0;
+      while (i + 1 < n && heads[i + 1] <= line) i++;
+      if (i + 1 < n) {
+        const raw = clamp((line - heads[i]) / Math.max(heads[i + 1] - heads[i], 1), 0, 1);
+        // hand over in the second half of the gap, once the next numeral is on screen
+        s = i + smooth(clamp((raw - 0.5) / 0.5, 0, 1));
+      } else {
+        s = i;
+      }
+    }
+    // a layer only lights while its own section is actually in view
+    const gate = slabs.map((_, j) => {
+      const r = rects[parts.length - 2 - j];
+      return clamp((innerHeight - r.top) / (innerHeight * 0.3), 0, 1) * clamp(r.bottom / (innerHeight * 0.3), 0, 1);
+    });
+    render(clamp(s + 1, 0, 1), clamp(L - 1 - clamp(s, 0, L - 1), 0, L - 1), clamp(s - (L - 1), 0, 1), gate);
+  }
+
+  let ticking = false;
+  const onScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => { ticking = false; update(); });
+  };
+  addEventListener("scroll", onScroll, { passive: true });
+  addEventListener("resize", onScroll);
+  update();
+})();
+</script>
+</body>
+</html>
