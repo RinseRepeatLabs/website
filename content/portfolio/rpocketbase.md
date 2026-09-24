@@ -10,6 +10,8 @@ year: "2026"
 timeline: "Ongoing"
 client: "Rinse Repeat Labs"
 image: "/images/rpocketbase.png"
+architectureUrl: "/portfolio/rpocketbase/fig1/"
+architectureImage: "/images/rpocketbase-fig1.svg"
 openSource: true
 license: "MIT"
 # githubUrl: "https://github.com/RinseRepeatLabs/rPocketBase"  # uncomment when the repo is made public
