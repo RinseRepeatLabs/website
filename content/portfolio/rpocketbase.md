@@ -21,7 +21,7 @@ license: "MIT"
 
 rPocketBase is a clean-room reimplementation of a PocketBase-style backend-as-a-service, written in Rust. It ships as a single self-hosted binary with an embedded SQLite database, a REST API, password auth with JWT, file storage, realtime updates over SSE, and an admin dashboard at `/_/`.
 
-It's an honest MVP: the goal is *PocketBase-shaped* HTTP so familiar patterns feel at home (`/api/collections/.../records`, auth-with-password, `expand`, filters) — not 1:1 SDK, OAuth, or batch parity. rPocketBase is independent of PocketBase, developed clean-room, and is not affiliated with or endorsed by the PocketBase authors.
+It's an honest MVP: the goal is *PocketBase-shaped* HTTP so familiar patterns feel at home (`/api/collections/.../records`, auth-with-password, `expand`, filters) — not 1:1 SDK or OAuth parity. `POST /api/batch` covers up to 50 JSON record writes in one transaction, not the official SDK batch client. rPocketBase is independent of PocketBase, developed clean-room, and is not affiliated with or endorsed by the PocketBase authors.
 
 ## Why We Built It
 
