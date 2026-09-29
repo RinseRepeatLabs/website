@@ -266,7 +266,7 @@ data: {"clientId": "…"}</pre>
             <tr><td class="t">url</td><td class="s">TEXT</td><td>Format checked on write</td></tr>
             <tr><td class="t">date</td><td class="s">TEXT</td><td>ISO-8601 text, comparable with <code>@now</code> and the date macros</td></tr>
             <tr><td class="t">json</td><td class="s">TEXT</td><td>Any JSON value, kept as written</td></tr>
-            <tr><td class="t">file</td><td class="s">TEXT</td><td>Filenames in <code>pb_data/storage</code>, served through <code>/api/files</code></td></tr>
+            <tr><td class="t">file</td><td class="s">TEXT</td><td>Filenames in <code>pb_data/storage</code>, served through <code>/api/files</code>. A refused delete or replace leaves them in place; files go only after the write commits</td></tr>
             <tr><td class="t">password</td><td class="s">TEXT</td><td>Argon2id hash. Never returned, and never usable in a client filter</td></tr>
             <tr><td class="t">autodate</td><td class="s">TEXT</td><td>Timestamp written on create, on update, or both</td></tr>
             <tr><td class="t">select</td><td class="s">TEXT</td><td>A fixed list of values. <code>maxSelect &gt; 1</code> makes it multi-select</td></tr>
@@ -339,7 +339,7 @@ rPocketBase listening on 127.0.0.1:8090</pre>
 
   <footer>
     <span>Sheet 1 of 1</span>
-    <span>rPocketBase 0.2.0-beta.19</span>
+    <span>rPocketBase 0.2.0-beta.20</span>
     <span><a href="/portfolio/rpocketbase/">rPocketBase</a> · a <a href="https://rinserepeatlabs.com">Rinse Repeat Labs</a> project</span>
   </footer>
 </div>
