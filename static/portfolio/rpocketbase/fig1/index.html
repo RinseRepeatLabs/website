@@ -190,7 +190,7 @@ event: PB_CONNECT
 data: {"clientId": "…"}</pre>
         <dl class="facts">
           <dt>Keep-alive</dt><dd>Every 15 seconds</dd>
-          <dt>Auth</dt><dd>Browsers' <code>EventSource</code> can't set headers, so it sends <code>?token=</code></dd>
+          <dt>Auth</dt><dd><code>EventSource</code> can't set headers, so it uses a short-lived ticket: <code>POST /api/realtime/ticket</code>, then <code>?ticket=</code>. <code>?token=</code> is rejected</dd>
           <dt>API keys</dt><dd>A key's collection allowlist applies to events too</dd>
           <dt>Scale</dt><dd>One instance: the hub and the rate limits live in memory</dd>
         </dl>
@@ -236,7 +236,10 @@ data: {"clientId": "…"}</pre>
           <dt>Null rule</dt><dd>Superusers only</dd>
           <dt>Empty rule</dt><dd>Public</dd>
           <dt>Operators</dt><dd><code>= != &gt; &gt;= &lt; &lt;= ~ !~</code>, plus <code>?</code> any-of forms. <code>=</code> and <code>?=</code> match any value in a multi-value relation or select</dd>
-          <dt>Context</dt><dd><code>@request.auth.*</code> <code>@request.body.*</code> <code>@now</code> …</dd>
+          <dt>Context</dt><dd><code>@request.auth.id</code>, <code>collectionId</code>, <code>collectionName</code>, and stored fields of the signed-in record. <code>@request.body.*</code> and <code>@now</code></dd>
+          <dt>Auth names</dt><dd>A name the login's collection does not have is refused when the rule is saved. <code>password</code>, <code>tokenKey</code>, and secrets stay unreadable</dd>
+          <dt>@collection</dt><dd>Compiles to <code>EXISTS</code> on a list rule. On create, update, delete, and view it matches nothing, and the editor warns. The rule still saves</dd>
+          <dt>Relations</dt><dd>The value in a rule is the related id. Naming another field, or a dotted <code>@request.body</code> path, warns in the editor. The rule still saves</dd>
           <dt>Modifiers</dt><dd><code>:isset</code> <code>:changed</code> <code>:length</code> <code>:lower</code></dd>
           <dt>Guardrail</dt><dd>Client filters can't reference <code>@collection</code>, <code>password</code> or <code>tokenKey</code></dd>
         </dl>
@@ -250,6 +253,7 @@ data: {"clientId": "…"}</pre>
           <dt>Kinds</dt><dd>Base collections, auth collections, and views</dd>
           <dt>Portable</dt><dd>Export and import the schema as JSON</dd>
           <dt>Behaviors</dt><dd>Append-only, record audit, unique key, TTL. Soft delete and draft/publish are admin packs that add a flag.</dd>
+          <dt>Indexes</dt><dd>A declared <code>CREATE INDEX</code>, unique and partial included, is created with the collection. A unique index that existing rows break is refused and not stored. A duplicate write returns 400</dd>
         </dl>
 
         <div class="sub">
@@ -259,7 +263,7 @@ data: {"clientId": "…"}</pre>
           <table class="types-tbl">
             <thead><tr><th>Type</th><th>Stored as</th><th>What it adds</th></tr></thead>
             <tbody>
-            <tr><td class="t">text</td><td class="s">TEXT</td><td>Minimum and maximum length. A unique key on this field can fill a prefixed sequence or another generated id</td></tr>
+            <tr><td class="t">text</td><td class="s">TEXT</td><td>Minimum and maximum length. <code>pattern</code> is checked on create, update, and batch; a pattern that is not a regular expression is refused when the field is saved. A unique key on this field can fill a prefixed sequence or another generated id</td></tr>
             <tr><td class="t">number</td><td class="s">REAL</td><td>Minimum and maximum value</td></tr>
             <tr><td class="t">bool</td><td class="s">INTEGER</td><td>Stored as 0 or 1</td></tr>
             <tr><td class="t">email</td><td class="s">TEXT</td><td>Format checked on write</td></tr>
@@ -271,14 +275,14 @@ data: {"clientId": "…"}</pre>
             <tr><td class="t">autodate</td><td class="s">TEXT</td><td>Timestamp written on create, on update, or both</td></tr>
             <tr><td class="t">select</td><td class="s">TEXT</td><td>A fixed list of values. <code>maxSelect &gt; 1</code> makes it multi-select</td></tr>
             <tr><td class="t">relation</td><td class="s">TEXT</td><td>Record ids in another collection. <code>maxSelect &gt; 1</code> stores a list; <code>=</code> and <code>?=</code> match any id in it. <code>cascadeDelete</code> removes this row with the target. <code>restrictDelete</code> refuses to delete the target while this field still points at it</td></tr>
-            <tr><td class="t">editor</td><td class="s">TEXT</td><td>Long text, stored as written, with the same length checks as text</td></tr>
+            <tr><td class="t">editor</td><td class="s">TEXT</td><td>Long text, stored as written, with the same length and pattern checks as text</td></tr>
             <tr><td class="t">secret</td><td class="s">TEXT</td><td>An AES-256-GCM envelope; sealed, see 12b. Never returned as plain text</td></tr>
             </tbody>
           </table>
         </div>
           <dl class="facts">
             <dt>Every field</dt><dd><code>required</code>, <code>hidden</code>, <code>presentable</code>, <code>system</code>, <code>primaryKey</code></dd>
-            <dt>Per type</dt><dd><code>min</code> / <code>max</code>, <code>maxSelect</code>, <code>collectionId</code>, <code>cascadeDelete</code>, <code>restrictDelete</code>, <code>onCreate</code> / <code>onUpdate</code>, <code>secretMode</code></dd>
+            <dt>Per type</dt><dd><code>min</code> / <code>max</code>, <code>pattern</code>, <code>maxSelect</code>, <code>collectionId</code>, <code>cascadeDelete</code>, <code>restrictDelete</code>, <code>onCreate</code> / <code>onUpdate</code>, <code>secretMode</code></dd>
           </dl>
         </div>
 
@@ -339,7 +343,7 @@ rPocketBase listening on 127.0.0.1:8090</pre>
 
   <footer>
     <span>Sheet 1 of 1</span>
-    <span>rPocketBase 0.2.0-beta.20</span>
+    <span>rPocketBase 0.2.0-beta.22</span>
     <span><a href="/portfolio/rpocketbase/">rPocketBase</a> · a <a href="https://rinserepeatlabs.com">Rinse Repeat Labs</a> project</span>
   </footer>
 </div>
