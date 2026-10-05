@@ -34,6 +34,12 @@
         <p class="text-xl text-slate-600 dark:text-slate-400">
           {{ .Params.subtitle }}
         </p>
+        {{ with .Site.Params.testerCount }}
+        <p class="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-sm font-medium">
+          <span class="w-2 h-2 rounded-full bg-primary-500"></span>
+          {{ . }} testers have signed up so far
+        </p>
+        {{ end }}
       </div>
     </div>
   </section>
@@ -160,6 +166,40 @@
                   </svg>
                   Commitment to complete assigned testing periods
                 </li>
+              </ul>
+            </div>
+
+            <!-- What you'd be testing -->
+            <div class="mt-8">
+              <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">What You'd Be Testing</h2>
+              <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                Rinse Repeat Labs builds its own apps, so testing is on real products heading for the App Store and Google Play, not on sample projects.
+              </p>
+              <div class="space-y-4">
+                <div class="bg-slate-50 dark:bg-slate-800 rounded-2xl p-6">
+                  <h3 class="font-semibold text-slate-900 dark:text-white mb-1">
+                    <a href="/portfolio/timeflow/" class="hover:underline">TimeFlow</a>
+                  </h3>
+                  <p class="text-sm text-slate-600 dark:text-slate-400">
+                    A calm daily planner. In TestFlight beta on iPhone and iPad; Android and the web version are already public, so you can try those before you apply.
+                  </p>
+                </div>
+                <div class="bg-slate-50 dark:bg-slate-800 rounded-2xl p-6">
+                  <h3 class="font-semibold text-slate-900 dark:text-white mb-1">
+                    <a href="/portfolio/route/" class="hover:underline">Route</a>
+                  </h3>
+                  <p class="text-sm text-slate-600 dark:text-slate-400">
+                    Fuel-cost estimates for everyday driving. iPhone only, in TestFlight beta ahead of its App Store release.
+                  </p>
+                </div>
+              </div>
+              <h3 class="text-lg font-semibold text-slate-900 dark:text-white mt-8 mb-3">How iOS Testing Works</h3>
+              <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-400 list-disc pl-5 marker:text-primary-500">
+                <li>iPhone and iPad builds are distributed through Apple's TestFlight app, so we need the email address tied to your Apple ID to send the invitation.</li>
+                <li>You install TestFlight free from the App Store, accept the invitation, and the app appears there. Updates arrive the same way.</li>
+                <li>Each build expires after 90 days, and a new one resets the clock.</li>
+                <li>Crash reports and any feedback you send from TestFlight come straight to us.</li>
+                <li>Android builds are shared as a direct download or through Google Play, with no extra app needed.</li>
               </ul>
             </div>
           </div>

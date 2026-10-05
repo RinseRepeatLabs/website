@@ -10,7 +10,9 @@ disableKinds = ["taxonomy", "term"]
   description = "Premium software development for mobile, web, and desktop applications. We bring your ideas to life with end-to-end development services."
   email = "rinserepeatlabs@gmail.com"
   phone = ""
-  consultationFee = "$199"
+  consultationFee = "$299"
+  # Testers signed up to date. Owner-supplied; update when it changes.
+  testerCount = "8"
 
   # Secrets - injected via GitHub Actions at build time
   # Set HUGO_FORMSPREE_ENDPOINT and HUGO_STRIPE_PAYMENT_LINK in repository secrets
