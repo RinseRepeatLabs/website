@@ -14,7 +14,7 @@
       {{ range $featured }}
       <article class="card group">
         <div class="relative overflow-hidden">
-          {{ with .Params.image }}
+          {{ with .Params.cardImage | default .Params.image }}
           <img src="{{ . }}" alt="{{ $.Title }}" class="w-full h-56 object-cover transition-transform duration-300 group-hover:scale-105">
           {{ else }}
           <div class="w-full h-56 bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center">

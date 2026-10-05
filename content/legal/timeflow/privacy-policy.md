@@ -1,113 +1,52 @@
 ---
 title: "TimeFlow Privacy Policy"
-date: 2026-01-17
+date: 2026-10-04
 draft: false
+canonical: "https://imcmurray.github.io/TimeFlow/privacy.html"
+description: "TimeFlow has no accounts, no servers, no advertising and no analytics. Your tasks stay on your device."
 ---
 
-**Last Updated:** January 2026
+**Last updated: October 4, 2026**
 
-## Overview
+This page mirrors TimeFlow's privacy policy. The canonical version, the one linked from the App Store and Play listings, is published with the app at
+[imcmurray.github.io/TimeFlow/privacy.html](https://imcmurray.github.io/TimeFlow/privacy.html). If the two ever differ, that one is authoritative.
 
-TimeFlow ("the App") is a calendar and productivity application developed by Rinse Repeat Labs for TimeFlow Inc. We are committed to protecting your privacy. This policy explains what data the App collects, how it's used, and your rights.
+TimeFlow is a daily schedule app from Rinse Repeat Labs. It has no accounts, no servers of its own, no advertising and no analytics. This page explains what happens to the information you put into it.
 
-## Data We Collect
+## Your tasks stay on your device
 
-### Account Information
-When you create an account, we collect:
-- Email address
-- Name (optional)
-- Profile picture (optional)
+- Tasks, notes, photos and settings are stored only on the device you use TimeFlow on. In the iPhone, iPad, Android and desktop apps that is the app's private storage; in the web version it is your browser's storage for this site.
+- TimeFlow never sends them anywhere. Deleting the app, or clearing this site's data in your browser, deletes them.
+- Backups are files you save yourself, to a place you choose. TimeFlow doesn't keep copies.
 
-### Calendar and Task Data
-To provide our core services, we collect:
-- Calendar events and appointments
-- Tasks and to-do items
-- Scheduling preferences
-- Time zone information
+## Sharing a schedule
 
-### Usage Analytics
-To improve our services, we collect:
-- App usage patterns (features used, session duration)
-- Device information (device type, operating system version)
-- Performance data (crash reports, error logs)
+When you share a schedule as a link, the tasks you chose are packed into the link itself, after the `#`. That part of a link is not sent to any server when it's opened, including ours: the recipient's browser reads it locally. Anyone who has the link can see what's in it, so share it only with people you trust. You can leave out descriptions and notes when sharing.
 
-### AI and Smart Features
-To power intelligent scheduling, we analyze:
-- Meeting patterns and preferences
-- Productivity trends
-- Focus session data
+## Permissions (Android)
 
-**This analysis is performed to improve your personal experience and is not shared with third parties.**
+- **Notifications** — to remind you before tasks start.
+- **Alarms & reminders** — so reminders arrive on the minute. Optional; without it they may be a few minutes late.
+- **Run at startup** — to set your reminders again after the phone restarts.
+- **Camera and photos** — only when you choose to add a photo to a task, through the system's own camera and photo picker.
 
-## How We Use Your Data
+TimeFlow doesn't request internet access on Android.
 
-We use your information to:
-- Provide and maintain the App's functionality
-- Sync your data across devices
-- Generate AI-powered scheduling suggestions
-- Provide time analytics and productivity insights
-- Send important service notifications
-- Improve and optimize the App
+## Permissions (iPhone and iPad)
 
-## Data Storage and Security
+- **Notifications** — asked the first time you set a reminder, to remind you before tasks start.
+- **Camera and photos** — only when you choose to add a photo to a task, through the system's own camera and photo picker.
 
-- All data is encrypted in transit and at rest
-- We use industry-standard security practices
-- Data is stored on secure AWS servers
-- Regular security audits are performed
-- You can export or delete your data at any time
+The iOS app collects no data, as declared on its App Store privacy label.
 
-## Data Sharing
+## The web version
 
-We do not sell your personal information. We may share data with:
-- **Service Providers**: Third parties that help us operate the App (cloud hosting, analytics)
-- **Legal Requirements**: When required by law or to protect our rights
-- **Business Transfers**: In connection with a merger, acquisition, or sale of assets
+The web version is hosted on GitHub Pages. Like any website, GitHub receives your IP address and browser details when the app's files are downloaded; see [GitHub's privacy statement](https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement). The app's display engine also downloads standard fonts from Google Fonts (`fonts.gstatic.com`) when needed; see [Google Fonts' privacy FAQ](https://developers.google.com/fonts/faq/privacy). Your tasks are not part of either request.
 
-All service providers are contractually obligated to protect your data.
+## Children
 
-## Third-Party Integrations
+TimeFlow isn't directed at children under 13 and doesn't knowingly collect anything from anyone.
 
-The App may integrate with:
-- **Calendar Services** (Google Calendar, Apple Calendar, Outlook): To sync your events
-- **Authentication Providers**: For secure sign-in options
+## Changes and contact
 
-Each integration is optional and governed by the respective provider's privacy policy.
-
-## Your Rights
-
-You have the right to:
-- **Access your data**: View all data we have about you in the App settings
-- **Export your data**: Download your calendar and task data
-- **Delete your data**: Request complete deletion of your account and data
-- **Opt out of analytics**: Disable usage analytics in settings
-- **Control notifications**: Manage notification preferences
-
-## Data Retention
-
-- Active account data is retained while your account exists
-- Deleted accounts are purged within 30 days
-- Anonymized analytics may be retained for service improvement
-
-## Children's Privacy
-
-TimeFlow is not intended for children under 13. We do not knowingly collect personal information from children under 13. If you believe a child has provided us with personal information, please contact us.
-
-## International Data Transfers
-
-Your data may be transferred to and processed in countries other than your own. We ensure appropriate safeguards are in place for international transfers.
-
-## Changes to This Policy
-
-We may update this policy to reflect changes in the App or legal requirements. We will notify you of significant changes through the App or email.
-
-## Contact Us
-
-If you have questions about this privacy policy or your data:
-
-**Rinse Repeat Labs**
-Email: {{< email >}}
-
----
-
-*This privacy policy is effective as of the date listed above.*
+If this policy changes, the new version will be posted at the canonical address above with a new date, and this page will be updated to match. Questions or concerns: [TimeFlow support](https://imcmurray.github.io/TimeFlow/support.html).

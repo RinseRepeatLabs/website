@@ -29,7 +29,7 @@
           {{ $.Title }}
         </h1>
 
-        {{ with $.Params.tagline }}
+        {{ with $.Params.headline | default $.Params.tagline }}
         <p class="text-xl text-white/80 mb-8">
           {{ . }}
         </p>
@@ -108,7 +108,7 @@
           {{ .Title }}
         </h1>
 
-        {{ with .Params.tagline }}
+        {{ with .Params.headline | default .Params.tagline }}
         <p class="text-xl text-slate-600 dark:text-slate-400 mb-8">
           {{ . }}
         </p>
