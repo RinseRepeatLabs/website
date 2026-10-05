@@ -4,7 +4,7 @@ date: 2026-09-17
 draft: false
 ---
 
-**Last Updated: September 2026**
+**Last Updated: October 2026**
 
 ## Introduction
 
@@ -36,10 +36,11 @@ When you visit our Site, we may automatically collect:
 
 ## Cookies and Tracking Technologies
 
-We use cookies and similar technologies to enhance your experience on our Site:
+We use only what the Site needs to work:
 
-- **Essential Cookies**: Required for the Site to function properly (e.g., remembering your theme preference, or keeping you signed in to the tester portal)
-- **Analytics Cookies**: Help us understand how visitors interact with our Site to improve our services
+- **Essential storage and cookies**: Required for the Site to function properly (e.g., remembering your theme preference, or keeping you signed in to the tester portal)
+
+**We don't use analytics or advertising cookies, and no analytics or tracking script runs on this Site.** Cloudflare and GitHub still receive the request information described under "Log Data" above, as any website host does.
 
 The tester portal uses only its sign-in cookie, which expires after 30 days or when you sign out. You can control cookies through your browser settings. Note that disabling certain cookies may affect Site functionality.
 

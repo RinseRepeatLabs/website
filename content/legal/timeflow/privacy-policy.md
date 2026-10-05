@@ -1,17 +1,17 @@
 ---
 title: "TimeFlow Privacy Policy"
-date: 2026-10-04
+date: 2026-10-05
 draft: false
 canonical: "https://imcmurray.github.io/TimeFlow/privacy.html"
 description: "TimeFlow has no accounts, no servers, no advertising and no analytics. Your tasks stay on your device."
 ---
 
-**Last updated: October 4, 2026**
+**Last updated: October 5, 2026**
 
 This page mirrors TimeFlow's privacy policy. The canonical version, the one linked from the App Store and Play listings, is published with the app at
 [imcmurray.github.io/TimeFlow/privacy.html](https://imcmurray.github.io/TimeFlow/privacy.html). If the two ever differ, that one is authoritative.
 
-TimeFlow is a daily schedule app from Rinse Repeat Labs. It has no accounts, no servers of its own, no advertising and no analytics. This page explains what happens to the information you put into it.
+TimeFlow is a daily schedule app made by [Rinse Repeat Labs](https://rinserepeatlabs.com/), Ian McMurray's studio (published on the App Store under Ian McMurray). It has no accounts, no servers of its own, no advertising and no analytics. This page explains what happens to the information you put into it.
 
 ## Your tasks stay on your device
 

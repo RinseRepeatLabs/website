@@ -4,9 +4,7 @@ date: 2026-01-12
 draft: false
 ---
 
-**Last Updated: January 2026**
-
-*Please review these terms with a legal professional before publishing.*
+**Last Updated: October 2026**
 
 ## Agreement to Terms
 
