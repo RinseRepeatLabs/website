@@ -208,7 +208,7 @@ data: {"clientId": "…"}</pre>
           <dt>Tickets</dt><dd><code>rpbf_&lt;expiry&gt;_&lt;hmac-sha256&gt;</code></dd>
           <dt>Caching</dt><dd>API responses are never cached</dd>
           <dt>Batch</dt><dd><code>POST /api/batch</code>, up to 50 JSON record writes in one transaction</dd>
-          <dt>Health</dt><dd><code>/api/health</code> reports liveness and version only</dd>
+          <dt>Health</dt><dd><code>/api/health</code> reports liveness and version only; build metadata needs <code>RPB_HEALTH_VERBOSE=1</code> or the superuser checklist</dd>
         </dl>
       </section>
 
@@ -323,6 +323,19 @@ data: {"clientId": "…"}</pre>
           <dt>Expiry</dt><dd>Collection-level TTL, plus a sweep an admin can run</dd>
           <dt>Backups</dt><dd>A zip of the database, WAL, file storage and secrets. Treat it as secret.</dd>
         </dl>
+
+        <div class="sub">
+          <h3><span class="sub-ref">10a</span>Starting the books</h3>
+          <p class="body">The protections above mean an issued invoice or a recorded payment cannot be deleted through the API — which also means demo data entered while trying an app would count in the real books forever. <code>records reset</code> is the one way out: offline, with the server stopped, and recorded.</p>
+          <pre class="line"><span class="k">$</span> rpocketbase records reset --prefix app_ --except app_settings --dry-run</pre>
+          <dl class="facts">
+            <dt>Scope</dt><dd>Only the collections named; system collections and views are refused</dd>
+            <dt>Deletes</dt><dd>Every row including locked, append-only and restrict-protected ones, in one transaction, then their stored files</dd>
+            <dt>Refuses</dt><dd>While a server holds the directory, and when a kept record <em>requires</em> one being reset</dd>
+            <dt>Records it</dt><dd>One <code>reset</code> row in the audit trail, so <code>/api/audit/verify</code> still passes</dd>
+            <dt>Numbering</dt><dd>Follows the rows that remain, so the next invoice is <code>INV-1</code></dd>
+          </dl>
+        </div>
       </section>
 
       <section class="part" id="p100" data-layer="all">
@@ -333,6 +346,7 @@ data: {"clientId": "…"}</pre>
 rPocketBase listening on 127.0.0.1:8090</pre>
         <dl class="facts">
           <dt>Language</dt><dd>Rust</dd>
+          <dt>Offline CLI</dt><dd><code>backup</code>, <code>collections</code>, <code>superuser</code>, <code>records reset</code> — the same binary, run against <code>pb_data</code> with the server stopped</dd>
           <dt>Default</dt><dd><code>127.0.0.1:8090</code>, data in <code>pb_data/</code></dd>
           <dt>TLS</dt><dd>Optional Caddy in front, outside the binary</dd>
           <dt>License</dt><dd>MIT. A clean-room project, independent of PocketBase.</dd>
