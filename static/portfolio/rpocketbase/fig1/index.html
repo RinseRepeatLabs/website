@@ -220,7 +220,9 @@ data: {"clientId": "…"}</pre>
         <dl class="facts">
           <dt>Hash</dt><dd>Argon2id, 19 MiB of memory, 2 passes, 1 lane</dd>
           <dt>Sessions</dt><dd>HS256 JWT, valid 24 hours; renewable for up to 7 days from sign-in</dd>
+          <dt>Identity</dt><dd>Email and username match without regard to case, so <code>Jon@…</code> signs in as <code>jon@…</code>. Any other identity field you configure matches exactly</dd>
           <dt>Limits</dt><dd>20 failed logins per 15 min per email, 40 per IP, then HTTP 429</dd>
+          <dt>Sign-ins</dt><dd>Every attempt is recorded in <code>_auth_audit</code> — success, wrong password, unknown identity, throttled — hashed into its own chain. The password never is</dd>
           <dt>API keys</dt><dd><code>rpbk_…</code>, never superusers: the collection allowlist is checked first, then the normal rules</dd>
           <dt>Compare</dt><dd>Constant-time for keys and token digests</dd>
           <dt>First run</dt><dd>The installer locks after the first superuser is created</dd>
@@ -346,7 +348,8 @@ data: {"clientId": "…"}</pre>
 rPocketBase listening on 127.0.0.1:8090</pre>
         <dl class="facts">
           <dt>Language</dt><dd>Rust</dd>
-          <dt>Offline CLI</dt><dd><code>backup</code>, <code>collections</code>, <code>superuser</code>, <code>records reset</code> — the same binary, run against <code>pb_data</code> with the server stopped</dd>
+          <dt>Offline CLI</dt><dd><code>backup</code>, <code>collections</code>, <code>superuser</code>, <code>doctor</code>, <code>records reset</code>, <code>records prune</code>, <code>files gc</code>, <code>db compact</code>, <code>audit prune</code> — the same binary, run against <code>pb_data</code>. The read-only ones work while it serves; anything that writes refuses until the server stops, and says which process holds the directory</dd>
+          <dt>Stopping</dt><dd><code>SIGTERM</code> drains what is in flight, checkpoints the WAL, closes the pool and releases the directory — a stop, not a kill</dd>
           <dt>Default</dt><dd><code>127.0.0.1:8090</code>, data in <code>pb_data/</code></dd>
           <dt>TLS</dt><dd>Optional Caddy in front, outside the binary</dd>
           <dt>License</dt><dd>MIT. A clean-room project, independent of PocketBase.</dd>
@@ -357,7 +360,7 @@ rPocketBase listening on 127.0.0.1:8090</pre>
 
   <footer>
     <span>Sheet 1 of 1</span>
-    <span>rPocketBase 0.2.0-beta.28</span>
+    <span>rPocketBase 0.2.0-beta.29</span>
     <span><a href="/portfolio/rpocketbase/">rPocketBase</a> · a <a href="https://rinserepeatlabs.com">Rinse Repeat Labs</a> project</span>
   </footer>
 </div>
